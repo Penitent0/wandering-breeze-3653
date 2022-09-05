@@ -12,15 +12,21 @@ RSpec.describe 'Projects Show Page' do
   # Challenge Theme: Apartment Furnishings)
   
   describe ' When I visit a projects show page ("/projects/:id"),' do
+    before :each do
+      @recycled_material_challenge = Challenge.create(theme: "Recycled Material", project_budget: 1000)
+      @news_chic = @recycled_material_challenge.projects.create(name: "News Chic", material: "Newspaper")
+    end
     it 'I see that projects name and material' do
-      recycled_material_challenge = Challenge.create(theme: "Recycled Material", project_budget: 1000)
-      news_chic = recycled_material_challenge.projects.create(name: "News Chic", material: "Newspaper")
+      visit "/projects/#{@news_chic.id}"
 
-      visit "/projects/#{news_chic.id}"
+      expect(page).to have_content("#{@news_chic.name}")
+      expect(page).to have_content("#{@news_chic.material}")
+    end
 
-      expect(page).to have_content("#{news_chic.name}")
-      expect(page).to have_content("#{news_chic.material}")
+    it 'And I also see the theme of the challenge that this project belongs to' do
+      visit "/projects/#{@news_chic.id}"
 
+      expect(page).to have_content("#{@recycled_material_challenge.theme}")
     end
   end
 end
