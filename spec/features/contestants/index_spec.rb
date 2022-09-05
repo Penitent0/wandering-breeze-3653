@@ -26,14 +26,6 @@ RSpec.describe 'contestant index page' do
       @news_chic = @recycled_material_challenge.projects.create(name: "News Chic", material: "Newspaper")
       @lit_fit = @furniture_challenge.projects.create(name: "Litfit", material: "Lamp")
     end
-    it 'I see a list of names of all the contestants' do
-      visit "/contestants"
-    
-      expect(page).to have_content("#{@jay.name}")
-      expect(page).to have_content("#{@gret.name}")
-      expect(page).to have_content("#{@kent.name}")
-      expect(page).to have_content("#{@erin.name}")
-    end
 
     it 'And under each contestants name I see a list of the projects (names) that theyve been on' do
       ContestantProject.create(contestant_id: @gret.id, project_id: @boardfit.id)
@@ -44,7 +36,12 @@ RSpec.describe 'contestant index page' do
       ContestantProject.create(contestant_id: @erin.id, project_id: @news_chic.id)
 
       visit "/contestants"
-      save_and_open_page
+
+      expect(page).to have_content("#{@jay.name}")
+      expect(page).to have_content("#{@gret.name}")
+      expect(page).to have_content("#{@kent.name}")
+      expect(page).to have_content("#{@erin.name}")
+
       expect(page).to have_content("#{@lit_fit.name}")
       expect(page).to have_content("#{@news_chic.name}")
       expect(page).to have_content("#{@boardfit.name}")
